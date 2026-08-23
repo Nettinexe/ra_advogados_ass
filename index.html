@@ -24,11 +24,38 @@
 <!-- PUBLICAÇÃO: descomentar quando a URL definitiva existir; criar também sitemap.xml e robots.txt
 <link rel="canonical" href="[INSERIR URL REAL]"> -->
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Fontes auto-hospedadas (ver PRIORIDADE 01/02 do relatório de performance):
+     preload apenas dos 2 arquivos usados acima da dobra (serifada do H1 + sans do corpo/eyebrow/botão). -->
+<link rel="preload" href="fonts/fraunces-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- Preload responsivo da imagem LCP (foto2 — Hero). Duas variantes de tipo:
+     o navegador só busca a que suportar; nenhum outro asset abaixo da dobra é priorizado. -->
+<link rel="preload" as="image" type="image/avif" href="img/foto2-960.avif" imagesrcset="img/foto2-480.avif 480w, img/foto2-720.avif 720w, img/foto2-960.avif 960w, img/foto2-1280.avif 1280w" imagesizes="(max-width:991px) 100vw, 46vw">
+<link rel="preload" as="image" type="image/webp" href="img/foto2-960.webp" imagesrcset="img/foto2-480.webp 480w, img/foto2-720.webp 720w, img/foto2-960.webp 960w, img/foto2-1280.webp 1280w" imagesizes="(max-width:991px) 100vw, 46vw">
 
 <style>
+@font-face{
+  font-family:"Fraunces";
+  font-style:normal;
+  font-weight:400 500;
+  font-display:swap;
+  src:url("fonts/fraunces-latin-var.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Fraunces";
+  font-style:italic;
+  font-weight:400;
+  font-display:swap;
+  src:url("fonts/fraunces-latin-italic-var.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Inter";
+  font-style:normal;
+  font-weight:400 700;
+  font-display:swap;
+  src:url("fonts/inter-latin-var.woff2") format("woff2");
+}
 /* ==========================================================
    ADVOCACIA CRIMINAL CLÁSSICA CONTEMPORÂNEA — Robson Viviani
    Sistema "dossiê editorial": numerais, ledgers, cortes retos.
@@ -170,6 +197,7 @@ a{color:inherit}
   position:relative;align-self:end;width:100%;aspect-ratio:4/5;
   max-height:clamp(520px,74vw,860px);margin:0 clamp(.75rem,2vw,1.5rem) clamp(.75rem,2vw,1.5rem) 0;
 }
+.hero__figure picture{display:block;width:100%;height:100%}
 .hero__figure img{
   width:100%;height:100%;object-fit:cover;object-position:center 12%;
   border-radius:var(--r-img);filter:saturate(1.02) drop-shadow(0 20px 32px rgba(0,0,0,.35));
@@ -221,6 +249,7 @@ a{color:inherit}
 .ledger--v .row span{color:var(--on-dark-2);text-align:right}
 
 .sobre__figure{position:relative;aspect-ratio:4/5;margin:var(--s-4) clamp(3.5rem,9vw,8rem) var(--s-4) 0}
+.sobre__figure picture{display:block;width:100%;height:100%}
 .sobre__figure img{
   width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;
   border-radius:var(--r-img);box-shadow:0 26px 50px rgba(0,0,0,.4);
@@ -246,6 +275,7 @@ a{color:inherit}
 .cta__copy{padding:var(--band) clamp(1.75rem,4.5vw,4.5rem);display:flex;flex-direction:column;justify-content:center}
 .cta h2{font-size:var(--t-3);max-width:13ch;font-weight:400}
 .cta__figure{position:relative;height:100%;padding:var(--s-4) clamp(1.5rem,4vw,3rem) var(--s-4) 0}
+.cta__figure picture{display:block;width:100%;height:100%}
 .cta__figure img{
   width:100%;height:100%;object-fit:cover;object-position:center 8%;
   border-radius:var(--r-img);
@@ -258,13 +288,12 @@ a{color:inherit}
 .ft__brandrow{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);padding:var(--s-4) 0}
 .ft__brand{display:flex;align-items:center;gap:.7rem}
 
-/* Logotipo RA — o arquivo fonte traz margem interna grande e fundo branco
-   embutido (JPEG sem alpha); o painel marfim absorve o branco de forma
-   intencional, e o recorte por escala/posicionamento remove a margem vazia
-   sem distorcer ou cortar letras, arco, balança ou o texto do logotipo. */
+/* Logotipo RA — img/logotipo.webp já vem pré-recortado (ver PRIORIDADE 10 do
+   relatório de performance: era um SVG com JPEG embutido de ~104 KB, sem
+   alpha; agora é um WebP de ~6 KB, cortado nos limites reais do logotipo).
+   O painel marfim absorve o fundo branco do arquivo de forma intencional. */
 .ra-logo{display:inline-flex;background:var(--white-warm);border-radius:6px;padding:.4rem .6rem;flex:none}
-.ra-logo__crop{position:relative;overflow:hidden;width:100px;aspect-ratio:1.1355;display:block}
-.ra-logo__crop img{position:absolute;max-width:none;width:123.9%;height:250%;left:-14.84%;top:-74%}
+.ra-logo img{display:block;width:100px;height:auto}
 .ft__base{padding:var(--s-3) 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem;font-size:.85rem;color:var(--on-dark-3)}
 .ft__base a{color:var(--gold-soft);text-decoration:none}
 
@@ -319,7 +348,7 @@ a{color:inherit}
   .ledger__cell:last-child{border-bottom:none}
   .civel{flex-direction:column;align-items:flex-start}
   .ft__brandrow{flex-direction:column;align-items:flex-start;gap:1.5rem}
-  .ra-logo__crop{width:86px}
+  .ra-logo img{width:86px}
   .ft__base{flex-direction:column}
   .marquee span{font-size:1.32rem}
   .marquee__track{gap:2rem}
@@ -393,7 +422,11 @@ a{color:inherit}
 
     <!-- FOTO 3 — corpo inteiro, fundo azul, sangrando até a borda do hero -->
     <figure class="hero__figure rv-img">
-      <img src="foto2.webp" alt="Robson Viviani, advogado, em retrato profissional" width="1536" height="2752" fetchpriority="high" decoding="async">
+      <picture>
+        <source type="image/avif" srcset="img/foto2-480.avif 480w, img/foto2-720.avif 720w, img/foto2-960.avif 960w, img/foto2-1280.avif 1280w" sizes="(max-width:991px) 100vw, 46vw">
+        <source type="image/webp" srcset="img/foto2-480.webp 480w, img/foto2-720.webp 720w, img/foto2-960.webp 960w, img/foto2-1280.webp 1280w" sizes="(max-width:991px) 100vw, 46vw">
+        <img src="img/foto2-960.webp" alt="Robson Viviani, advogado, em retrato profissional" width="1536" height="2752" fetchpriority="high" decoding="async">
+      </picture>
     </figure>
   </div>
 
@@ -487,7 +520,11 @@ a{color:inherit}
 
   <!-- FOTO 1 — sentado em poltrona, retrato editorial sangrando até a borda -->
   <figure class="sobre__figure rv-img">
-    <img src="foto1.webp" alt="Robson Viviani, advogado, em retrato editorial" width="1536" height="2752" loading="lazy" decoding="async">
+    <picture>
+      <source type="image/avif" srcset="img/foto1-480.avif 480w, img/foto1-640.avif 640w, img/foto1-800.avif 800w, img/foto1-1024.avif 1024w" sizes="(max-width:767px) 88vw, (max-width:991px) 92vw, 47vw">
+      <source type="image/webp" srcset="img/foto1-480.webp 480w, img/foto1-640.webp 640w, img/foto1-800.webp 800w, img/foto1-1024.webp 1024w" sizes="(max-width:767px) 88vw, (max-width:991px) 92vw, 47vw">
+      <img src="img/foto1-800.webp" alt="Robson Viviani, advogado, em retrato editorial" width="1536" height="2752" loading="lazy" decoding="async">
+    </picture>
   </figure>
 </section>
 
@@ -552,7 +589,11 @@ a{color:inherit}
 
     <!-- FOTO 2 — corpo inteiro, já recortada (alpha), sangrando pela borda -->
     <div class="cta__figure rv-img">
-      <img src="foto3.webp" alt="Robson Viviani, advogado, em retrato de corpo inteiro" width="1536" height="2752" loading="lazy" decoding="async">
+      <picture>
+        <source type="image/avif" srcset="img/foto3-480.avif 480w, img/foto3-640.avif 640w, img/foto3-800.avif 800w, img/foto3-1024.avif 1024w" sizes="(max-width:991px) 100vw, 38vw">
+        <source type="image/webp" srcset="img/foto3-480.webp 480w, img/foto3-640.webp 640w, img/foto3-800.webp 800w, img/foto3-1024.webp 1024w" sizes="(max-width:991px) 100vw, 38vw">
+        <img src="img/foto3-800.webp" alt="Robson Viviani, advogado, em retrato de corpo inteiro" width="1536" height="2752" loading="lazy" decoding="async">
+      </picture>
     </div>
   </div>
 </section>
@@ -566,9 +607,7 @@ a{color:inherit}
         <span><span class="brand__name">Robson Viviani</span><span class="brand__role" style="margin-top:.15rem">Advocacia</span></span>
       </div>
       <span class="ra-logo">
-        <span class="ra-logo__crop">
-          <img src="logotipo.svg" alt="RA Advogados Associados" width="768" height="1365">
-        </span>
+        <img src="img/logotipo.webp" alt="RA Advogados Associados" width="220" height="193" loading="lazy" decoding="async">
       </span>
     </div>
 
@@ -643,10 +682,13 @@ a{color:inherit}
   const panel  = document.getElementById('panel');
   const panelX = document.getElementById('panelX');
   const setPanel = (open) => {
+    // grava todas as mudanças de estilo/layout primeiro; o focus() é adiado para o
+    // próximo frame porque, chamado no mesmo turno de várias escritas de DOM,
+    // força um reflow síncrono (era o reflow apontado no relatório de performance).
     panel.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', String(open));
     document.body.style.overflow = open ? 'hidden' : '';
-    (open ? panelX : burger).focus();
+    requestAnimationFrame(() => (open ? panelX : burger).focus());
   };
   burger.addEventListener('click', () => setPanel(true));
   panelX.addEventListener('click', () => setPanel(false));
